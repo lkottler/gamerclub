@@ -5,20 +5,14 @@ using Photon.Pun;
 
 public class Interactable : MonoBehaviour
 {
-    public float radius = 3f;
-
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, radius);
-    }
-
+    private GameObject tag;
 
     private void OnTriggerEnter(Collider other)
     {
         PhotonView pv = other.GetComponent<PhotonView>();
         if (pv != null && pv.IsMine)
         {
+            tag = TextTag.createTag(this.transform, "sample text");
             Debug.Log("player can pickup item");
         }
     }
@@ -27,6 +21,7 @@ public class Interactable : MonoBehaviour
         PhotonView pv = other.GetComponent<PhotonView>();
         if (pv != null && pv.IsMine)
         {
+            Destroy(tag);
             Debug.Log("player can no longer pickup item");
         }
     }
@@ -35,7 +30,7 @@ public class Interactable : MonoBehaviour
         PhotonView pv = other.GetComponent<PhotonView>();
         if (pv != null && pv.IsMine && Input.GetKey("f"))
         {
-            Debug.Log("player pressed f");
+            Debug.Log("player attempted to pick up the item");
         }
     }
 }
